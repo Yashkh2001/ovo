@@ -9,7 +9,7 @@ import { db } from '../external/firebase'
 const GamePage = () => {
   const navigate = useNavigate();
   const Ref = useRef(null);
-  const [users, setUsers] = useState([1, 2, 3, 4, 5])
+  // const [users, setUsers] = useState([1, 2, 3, 4, 5])
   const [selectedUser, setSelectedUser] = useState(0)
   const [winners, setWinners] = useState([])
   const [array1, setArray1] = useState([])
@@ -17,20 +17,53 @@ const GamePage = () => {
   const [total, setTotal] = useState(null)
   const { user, setUser } = useContext(userContext)
   // The state for our timer
-  const [timer, setTimer] = useState('30');
-
+  const [timer, setTimer] = useState('40');
+  const [count, setCount] = useState(0);
+  const [activeUsers, setActiveUsers] = useState([]);
   // useEffect(() => {
-    
+
   // }, [])
 
   useEffect(() => {
-    console.log(user,'gotuser')
-    if (user !=null) {
+
+    db.collection('activeusers').onSnapshot((doc) => {
+      setCount(doc.docs.length)
+      const usrs = doc.docs.map(element => ({
+        data: element.data()
+      }))
+      setActiveUsers(usrs)
+      console.log(activeUsers, 'activeusers')
+    })
+
+
+
+  }, [])
+
+
+  useEffect(() => {
+    console.log(user, 'gotuser')
+
+
+
+    if (user != null) {
       db.collection("activeusers").doc(user.id).set({
-       ...user
+        ...user
       }).then((res) => {
 
       })
+    }
+  }, [])
+
+  useEffect(() => {
+    // console.log('Hello World');
+    window.onbeforeunload = confirmExit;
+    function confirmExit() {
+      db.collection("activeusers").doc(user.id).delete()
+    }
+    return () => {
+      db.collection("activeusers").doc(user.id).delete()
+      db.collection("usersa").doc(user.id).delete()
+      db.collection("usersb").doc(user.id).delete()
     }
   }, [])
 
@@ -72,7 +105,7 @@ const GamePage = () => {
     // If you adjust it you should also need to
     // adjust the Endtime formula we are about
     // to code next    
-    // setTimer('30');
+    // setTimer('100');
 
     // If you try to remove this line the 
     // updating of timer Variable will be
@@ -95,7 +128,7 @@ const GamePage = () => {
 
     // This is where you need to adjust if 
     // you entend to add more time
-    deadline.setSeconds(deadline.getSeconds() + 30);
+    deadline.setSeconds(deadline.getSeconds() + 40);
     return deadline;
 
 
@@ -141,12 +174,47 @@ const GamePage = () => {
 
   useEffect(() => {
     if (total < 1) {
+
+      db.collection('usersa').onSnapshot((doc) => {
+        const usrsa = doc.docs.map(element => ({
+          data: element.data()
+
+        }))
+        setArray1(usrsa)
+        console.log(array1, 'array1')
+      })
+
+      db.collection('usersb').onSnapshot((doc) => {
+        const usrsb = doc.docs.map(element => ({
+          data: element.data()
+        }))
+        setArray2(usrsb)
+        console.log(array2, 'array2')
+      })
+
       if (array1.length > array2.length) {
-        alert(`winners are ${array2.toString()}`)
+
+        if (array2.some(data => data.data.id === user.id)) {
+          alert(`You win`)
+        } else {
+          alert(`You lose`)
+        }
+
+        // alert(`winners are ${array2.length}`)
+        // alert(`winners are ${array2.toString()}`)
+        // console.log(`winners are ${array2.length}`)
         clearTimer();
 
       } else if (array2.length > array1.length) {
-        alert(`winners are ${array1.toString()}`)
+
+        if (array1.some(data => data.data.id === user.id)) {
+          alert(`You win`)
+        } else {
+          alert(`You lose`)
+        }
+
+        // alert(`winners are ${array1.length}`)
+        // console.log(`winners are ${array1.length}`)
         clearTimer();
       }
     }
@@ -154,17 +222,37 @@ const GamePage = () => {
 
 
   const selectArray1 = () => {
-    setArray1(array1.push(selectedUser))
-    setArray1([...new Set(array1)]);
+    // setArray1(array1.push(user.id))
+    // setArray1([...new Set(array1)]);
+
+    db.collection("usersa").doc(user.id).set({
+      ...user
+    }).then((res) => {
+
+
+
+      // db.collection("users").where('email', '==', userObject.email).get().then((res) => {
+      //     res.docs.forEach((doc) => {
+      //         let userData=doc.data()
+      //         userData['id']=doc.id
+      //         console.log(doc.id, 'data')
+      //         console.log(doc.data(), 'data')
+      //         localStorage.setItem('user', JSON.stringify(userData))
+      //         setUser(userData)
+      //         navigate('/golive')
+      //     })
+      // })
+    }).catch(alert);
 
 
 
     // debugger;
 
     setTimeout(() => {
-      setArray2(array2.filter(function (item) {
-        return item !== selectedUser
-      }))
+      // setArray2(array2.filter(function (item) {
+      //   return item !== selectedUser
+      // }))
+      db.collection("usersb").doc(user.id).delete()
 
 
     }, 500);
@@ -172,16 +260,37 @@ const GamePage = () => {
 
   }
   const selectArray2 = () => {
-    setArray2(array2.push(selectedUser))
+    // setArray2(array2.push(selectedUser))
 
 
-    setArray2([...new Set(array2)]);
+    // setArray2([...new Set(array2)]);
+
+
+    db.collection("usersb").doc(user.id).set({
+      ...user
+    }).then((res) => {
+
+
+      // db.collection("users").where('email', '==', userObject.email).get().then((res) => {
+      //     res.docs.forEach((doc) => {
+      //         let userData=doc.data()
+      //         userData['id']=doc.id
+      //         console.log(doc.id, 'data')
+      //         console.log(doc.data(), 'data')
+      //         localStorage.setItem('user', JSON.stringify(userData))
+      //         setUser(userData)
+      //         navigate('/golive')
+      //     })
+      // })
+    }).catch(alert);
 
 
     setTimeout(() => {
-      setArray1(array1.filter(function (item) {
-        return item !== selectedUser
-      }))
+      // setArray1(array1.filter(function (item) {
+      //   return item !== selectedUser
+      // }))
+
+      db.collection("usersa").doc(user.id).delete()
 
     }, 500);
 
@@ -193,10 +302,13 @@ const GamePage = () => {
         {timer}
       </div>
 
-      <div onClick={selectArray1} className='button1'>
-        a
+      <div style={{ marginTop: '20px' }} className="timer">
+        {count}
       </div>
-      <div className='users'>
+
+      <div onClick={selectArray1} className='button1'>
+      </div>
+      {/* <div className='users'>
         {
           users.map((data) => {
             return (
@@ -205,7 +317,7 @@ const GamePage = () => {
           })
         }
 
-      </div>
+      </div> */}
       <div onClick={selectArray2} className='button2'>
       </div>
 
