@@ -6,7 +6,7 @@ import Bottombar from '../components/Bottombar';
 import { db } from '../external/firebase'
 
 
-const GamePage = () => {
+const GamePage = (props) => {
   const navigate = useNavigate();
   const Ref = useRef(null);
   // const [users, setUsers] = useState([1, 2, 3, 4, 5])
@@ -17,55 +17,57 @@ const GamePage = () => {
   const [total, setTotal] = useState(null)
   const { user, setUser } = useContext(userContext)
   // The state for our timer
-  const [timer, setTimer] = useState('40');
+  const [timer, setTimer] = useState('30');
   const [count, setCount] = useState(0);
   const [activeUsers, setActiveUsers] = useState([]);
   // useEffect(() => {
 
   // }, [])
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    db.collection('activeusers').onSnapshot((doc) => {
-      setCount(doc.docs.length)
-      const usrs = doc.docs.map(element => ({
-        data: element.data()
-      }))
-      setActiveUsers(usrs)
-      console.log(activeUsers, 'activeusers')
-    })
-
-
-
-  }, [])
-
-
-  useEffect(() => {
-    console.log(user, 'gotuser')
+  //   db.collection('activeusers').onSnapshot((doc) => {
+  //     setCount(doc.docs.length)
+  //     const usrs = doc.docs.map(element => ({
+  //       data: element.data()
+  //     }))
+  //     setActiveUsers(usrs)
+  //     console.log(activeUsers, 'activeusers')
+  //   })
 
 
 
-    if (user != null) {
-      db.collection("activeusers").doc(user.id).set({
-        ...user
-      }).then((res) => {
+  // }, [])
 
-      })
-    }
-  }, [])
 
-  useEffect(() => {
-    // console.log('Hello World');
-    window.onbeforeunload = confirmExit;
-    function confirmExit() {
-      db.collection("activeusers").doc(user.id).delete()
-    }
-    return () => {
-      db.collection("activeusers").doc(user.id).delete()
-      db.collection("usersa").doc(user.id).delete()
-      db.collection("usersb").doc(user.id).delete()
-    }
-  }, [])
+  // useEffect(() => {
+  //   console.log(user, 'gotuser')
+
+
+
+  //   if (user != null) {
+  //     db.collection("activeusers").doc(user.id).set({
+  //       ...user
+  //     }).then((res) => {
+
+  //     })
+  //   }
+  // }, [])
+
+  // useEffect(() => {
+  //   // console.log('Hello World');
+  //   window.onbeforeunload = confirmExit;
+  //   function confirmExit() {
+  //     db.collection("activeusers").doc(user.id).delete()
+  //     db.collection("usersa").doc(user.id).delete()
+  //     db.collection("usersb").doc(user.id).delete()
+  //   }
+  //   return () => {
+  //     db.collection("activeusers").doc(user.id).delete()
+  //     db.collection("usersa").doc(user.id).delete()
+  //     db.collection("usersb").doc(user.id).delete()
+  //   }
+  // }, [])
 
   const getTimeRemaining = (e) => {
     const totalTemp = Date.parse(e) - Date.parse(new Date());
@@ -128,7 +130,7 @@ const GamePage = () => {
 
     // This is where you need to adjust if 
     // you entend to add more time
-    deadline.setSeconds(deadline.getSeconds() + 40);
+    deadline.setSeconds(deadline.getSeconds() + 30);
     return deadline;
 
 
@@ -196,8 +198,20 @@ const GamePage = () => {
 
         if (array2.some(data => data.data.id === user.id)) {
           alert(`You win`)
+          db.collection('users').doc(user.id).update({
+            tokens: user.tokens+1
+          })
+          user.tokens=user.tokens+1
+          localStorage.setItem('user',JSON.stringify(user))
+             navigate('/buytokens')
         } else {
           alert(`You lose`)
+          db.collection('users').doc(user.id).update({
+            tokens: user.tokens-1
+          })
+          user.tokens=user.tokens-1
+          localStorage.setItem('user',JSON.stringify(user))
+             navigate('/buytokens')
         }
 
         // alert(`winners are ${array2.length}`)
@@ -209,8 +223,20 @@ const GamePage = () => {
 
         if (array1.some(data => data.data.id === user.id)) {
           alert(`You win`)
+          db.collection('users').doc(user.id).update({
+            tokens: user.tokens+1
+          })
+          user.tokens=user.tokens+1
+          localStorage.setItem('user',JSON.stringify(user))
+             navigate('/buytokens')
         } else {
           alert(`You lose`)
+          db.collection('users').doc(user.id).update({
+            tokens: user.tokens-1
+          })
+          user.tokens=user.tokens-1
+          localStorage.setItem('user',JSON.stringify(user))
+             navigate('/buytokens')
         }
 
         // alert(`winners are ${array1.length}`)
@@ -303,7 +329,7 @@ const GamePage = () => {
       </div>
 
       <div style={{ marginTop: '20px' }} className="timer">
-        {count}
+        {props.count}
       </div>
 
       <div onClick={selectArray1} className='button1'>

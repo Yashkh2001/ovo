@@ -10,6 +10,7 @@ import Rewards from './pages/Rewards';
 import GetStarted from './pages/GetStarted';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import StartGame from './pages/StartGame';
 export const userContext=React.createContext()
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
     <BrowserRouter>
     <Routes>
     <Route exact path="/" element={<GetStarted/>}/>
-      <Route exact path="/golive" element={<GamePage/>}/>
+      <Route exact path="/golive" element={<StartGame/>}/>
       <Route exact path="/register" element={<Register/>}/>
       <Route exact path="/login" element={<Login/>}/>
       <Route exact path="/myaccount" element={<MyAccount/>}/>

@@ -161,6 +161,7 @@ div{
   justify-content: center;
   align-items: center;
   row-gap: 20px !important;
+  text-align: center;
 }
 
 .columnCenter button{
@@ -207,6 +208,11 @@ div{
   justify-content: center !important;
 }
 
+.gap20{
+  display: flex;
+  gap: 20px !important;
+}
+
 .otpdiv {
   margin-top: 10px !important;
   padding-left: 20px;
@@ -230,4 +236,21 @@ div{
 
 .pad20{
   padding: 20px !important;
+}
+
+.tokenbtns button{
+  padding: 9px 15px !important;
+  background-color: #10F442 !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 5px !important;
+}
+
+.justifycenter{
+  display: flex;
+  justify-content: center !important;
+}
+
+.m-t-10{
+  margin-top: 10px !important;
 }
