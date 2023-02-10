@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import firebase, { createUserDocument } from '../external/firebase'
 import axios from 'axios'
 import { userContext } from '../App'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import jwt_decode from "jwt-decode"
 import { Dropdown } from 'primereact/dropdown';
 import OtpInput from 'react-otp-input';
@@ -21,14 +21,13 @@ const Login = () => {
     const [picture, setPicture] = useState('');
     const [showfb, setShowfb] = useState(false);
     const [userGoogle, setuserGoogle] = useState({})
-    const [userFacebook, setuserFacebook] = useState({})
-    const [number, setNumber] = useState('')
     const [name, setName] = useState('')
-
-    const [otp, setotp] = useState(0);
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [final, setfinal] = useState('');
     const [error, setError] = useState({});
     const [sent, setSent] = useState(false);
+    const [emailVerified, setemailVerified] = useState(false)
     const google = window.google;
 
     const [selectedCode, setSelectedCode] = useState(null);
@@ -54,154 +53,46 @@ const Login = () => {
 
 
 
-    const configureCaptcha = () => {
-
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
-            'size': 'invisible',
-            'callback': (response) => {
-                // reCAPTCHA solved, allow signInWithPhoneNumber.
-                this.onSignInSubmit();
-                console.log("Recaptca varified")
-            },
-            defaultCountry: "IN"
-        });
-    }
-
-    const onSignInSubmit = (e) => {
-        e.preventDefault()
-        // if ((number.length > 10 || number.length < 10)) {
-        //     setError({ number: true });
-        //     return;
-        // }
-        // else {
-        //     setError({});
-        // }
-        if ((name == null || name == '')) {
-            setError({ name: true });
-            return;
-        }
-        else {
-            setError({});
-        }
-
-        if (selectedCode == null) {
-            setError({ code: true });
-            return;
-        } else {
-            setError({});
-        }
 
 
 
-        configureCaptcha()
-        const phoneNumber = `+${selectedCode}` + number
-        console.log(phoneNumber)
-        const appVerifier = window.recaptchaVerifier;
-        firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
-            .then((confirmationResult) => {
-                setfinal(confirmationResult);
-                // console.log(final)
-                // SMS sent. Prompt user to type the code from the message, then sign the
-                // user in with confirmationResult.confirm(code).
-                window.confirmationResult = confirmationResult;
-                console.log(final)
-                console.log(window.confirmationResult)
-                alert("OTP has been sent on " + phoneNumber)
-                setSent(true)
-                // ...
-            }).catch((error) => {
-                // Error; SMS not sent
-                // ...
-                console.log("SMS not sent")
-            });
+
+
+    // useEffect(() => {
+    //     setInterval(() => {
+    //         console.log(firebase.auth().currentUser.emailVerified,'verifiedemail')
+    //        setemailVerified(firebase.auth().currentUser.emailVerified)
+    //        if(emailVerified){
+    //         navigate('golive')
+    //        }
+    //       }, 1000);
+    // }, [])
+
+
+
+    const loginwithemail = () => {
+
+        // const auth = getAuth();
+        firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
+            console.log(result.user)
+
+        }).catch(error)
 
     }
 
-    // Validate OTP
-    const handleChange = (otp) => setotp(otp);
+    const checkemailverification = () => {
+        setInterval(() => {
+            firebase.auth().currentUser.reload()
+            console.log(firebase.auth().currentUser)
+            console.log(firebase.auth().currentUser.emailVerified, 'verifiedemail')
 
-    const ValidateOtp = () => {
-        if (otp === null || final === null)
-            return;
-        final.confirm(otp).then((result) => {
-
-
-            db.collection("users").where('phone', '==', number).get().then((res) => {
-                if (!res.empty) {
-                    db.collection("users").where('phone', '==', number).get().then((res) => {
-                        res.docs.forEach((doc) => {
-                            let userData=doc.data()
-                            userData['id']=doc.id
-                            console.log(doc.id, 'data')
-                            console.log(doc.data(), 'data')
-                            localStorage.setItem('user', JSON.stringify(userData))
-                            setUser(userData)
-                            navigate('/golive')
-                        })
-                    })
-
-                } else {
-                    db.collection("users").add({
-                        name: name,
-                        phone: number,
-                        countryCode: selectedCode,
-                        tokens: 5,
-                        loginwith: 'PHONE'
-                    }).then((res) => {
-                        db.collection("users").where('phone', '==', number).get().then((res) => {
-                            res.docs.forEach((doc) => {
-                                let userData=doc.data()
-                                userData['id']=doc.id
-                                console.log(doc.id, 'data')
-                                console.log(doc.data(), 'data')
-                                localStorage.setItem('user', JSON.stringify(userData))
-                                setUser(userData)
-                                navigate('/golive')
-                            })
-                        })
-                    }).catch(alert);
-                }
-            })
-
-            // db.collection("users").add({
-            //     name: name,
-            //     phone: number,
-            //     countryCode: selectedCode,
-            //     tokens: 5,
-            //     loginwith: 'PHONE'
-            // }).then((res) => {
-            //     console.log(res)
-            // }).catch(alert);
-
-            // axios.post("http://localhost:3001/login", {
-            //     number: number,
-            //     loginwith: 'PHONE'
-            // }).then((response) => {
-            //     setUser(response.data)
-            //     console.log(response);
-            //     const userdata = response.data
-            //     setTimeout(() => {
-            //         axios.post("http://localhost:3001/gettoken", {
-            //             id: userdata.id
-            //         }).then((response) => {
-
-            //             console.log(response);
-            //             localStorage.setItem('token', response.data)
-            //         });
-            //         console.log(userdata, 'data of user')
-            //         localStorage.setItem('user', JSON.stringify(userdata))
-            //         setUser(userdata)
-            //         navigate('/completeprofile')
-            //     }, 600);
+            if (firebase.auth().currentUser.emailVerified) {
 
 
-            // });
 
-        }).catch((err) => {
-            setError({ otp: true });
-        })
+            }
 
-
+        }, 2000);
 
     }
 
@@ -256,8 +147,8 @@ const Login = () => {
             if (!res.empty) {
                 db.collection("users").where('email', '==', userObject.email).get().then((res) => {
                     res.docs.forEach((doc) => {
-                        let userData=doc.data()
-                        userData['id']=doc.id
+                        let userData = doc.data()
+                        userData['id'] = doc.id
                         console.log(doc.id, 'data')
                         console.log(doc.data(), 'data')
                         localStorage.setItem('user', JSON.stringify(userData))
@@ -275,8 +166,8 @@ const Login = () => {
                 }).then((res) => {
                     db.collection("users").where('email', '==', userObject.email).get().then((res) => {
                         res.docs.forEach((doc) => {
-                            let userData=doc.data()
-                            userData['id']=doc.id
+                            let userData = doc.data()
+                            userData['id'] = doc.id
                             console.log(doc.id, 'data')
                             console.log(doc.data(), 'data')
                             localStorage.setItem('user', JSON.stringify(userData))
@@ -317,60 +208,34 @@ const Login = () => {
                 !sent &&
                 <>
                     <div className='inputFlex'>
-                        <input type="text" value={name} placeholder='Enter your name' onChange={(e) => { setName(e.target.value) }} />
-                        {error.name &&
-                            <p className='f-12 color-red bot3'>Please enter a name</p>
-                        }
-                        <input type="number" value={number} placeholder='Enter mobile number' onChange={(e) => { setNumber(e.target.value) }} />
-                        {error.number &&
-                            <p className='f-12 color-red bot3'>Please enter a valid mobile number</p>
-                        }
-                        <input type="text" placeholder='Email' />
+
+                        <input type="text" value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder='Email' />
+                        <input type="text" value={password} onChange={(e) => { setPassword(e.target.value) }} placeholder='Password' />
                     </div>
-                    <div style={{ paddingLeft: '20px', paddingRight: '20px' }} className='m-b-20'>
-                        <Dropdown value={selectedCode} options={cities} onChange={onCityChange} optionLabel="code" placeholder="Select Country Code" />
-                    </div>
-                    <div className='displayCenter'>
-                        {error.code &&
-                            <p className='f-12 color-red bot3'>Please select code</p>
-                        }
-                    </div>
+
+
                     <div className='columnCenter'>
-                        <button onClick={onSignInSubmit} className='getStartedBtn'>
+                        {/* <button onClick={onSignInSubmit} className='getStartedBtn'>
                             Login with Phone
+                        </button> */}
+                        <button onClick={loginwithemail} className='getStartedBtn'>
+                            Login
                         </button>
                         <div className='or'>OR</div>
                         <div id='SignInDiv'></div>
                         {/* <button onClick={onSignInSubmit} className='getStartedBtn'>
         Login with Google
     </button> */}
-                        {/* <span>Dont have an Account? Register</span> */}
+                        <NavLink to="/register" className="tripicon" >
+                            <span>Dont have an Account? Register</span>
+                        </NavLink>
                     </div>
 
                     <div id="recaptcha-container"></div>
                     <div id="sign-in-button"></div>
                 </>
             }
-            {
-                sent &&
-                <>
-                    <p className='f-14 m-b-10 padclass f-500 m-t-40 opacity7 pad20'>A 6 digit code has been sent to +{selectedCode} <br /> {number}</p>
-                    <div className='otpdiv'>
-                        <OtpInput
-                            value={otp}
-                            onChange={handleChange}
-                            numInputs={6}
-                        />
-                        {error.otp &&
-                            <p className='f-12 color-red bot3 f-600'>Invalid Otp</p>
-                        }
-                    </div>
-                    <div className="bluebtn padclass displayCenter">
-                        <button className='getStartedBtn m-t-20' onClick={ValidateOtp}>Continue</button>
-                    </div>
-                </>
 
-            }
 
         </div>
     )

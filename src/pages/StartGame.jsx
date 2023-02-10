@@ -5,6 +5,7 @@ import Loader from '../components/Loader';
 import { db } from '../external/firebase'
 import GamePage from './GamePage';
 
+
 const StartGame = () => {
   const navigate = useNavigate();
     const { user, setUser } = useContext(userContext)
@@ -15,6 +16,8 @@ const StartGame = () => {
 
 
     useEffect(() => {
+   
+  
    
         // console.log('Hello World');
         window.onbeforeunload = confirmExit;

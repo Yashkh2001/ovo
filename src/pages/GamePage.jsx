@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { userContext } from '../App';
 import Bottombar from '../components/Bottombar';
 import { db } from '../external/firebase'
-
+import Swal from "sweetalert2";
 
 const GamePage = (props) => {
   const navigate = useNavigate();
@@ -197,21 +197,61 @@ const GamePage = (props) => {
       if (array1.length > array2.length) {
 
         if (array2.some(data => data.data.id === user.id)) {
-          alert(`You win`)
-          db.collection('users').doc(user.id).update({
-            tokens: user.tokens+1
+          Swal.fire({
+            title: 'You Win!',
+            icon: 'success',
+            text: "Do you want to continue?",
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+          }).then(result => {
+            if (result.dismiss != null && result.dismiss != undefined) {
+              db.collection('users').doc(user.id).update({
+                tokens: user.tokens + 1
+              })
+              user.tokens = user.tokens + 1
+              localStorage.setItem('user', JSON.stringify(user))
+              navigate('/buytokens')
+              Swal.close();
+            } else {
+              db.collection('users').doc(user.id).update({
+                tokens: user.tokens + 1
+              })
+              user.tokens = user.tokens + 1
+              localStorage.setItem('user', JSON.stringify(user))
+              window.location.reload()
+            }
           })
-          user.tokens=user.tokens+1
-          localStorage.setItem('user',JSON.stringify(user))
-             navigate('/buytokens')
         } else {
-          alert(`You lose`)
-          db.collection('users').doc(user.id).update({
-            tokens: user.tokens-1
+          Swal.fire({
+            title: 'You Lose!',
+            icon: 'error',
+            text: "Do you want to continue?",
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+          }).then(result => {
+            if (result.dismiss != null && result.dismiss != undefined) {
+              db.collection('users').doc(user.id).update({
+                tokens: user.tokens - 1
+              })
+              user.tokens = user.tokens - 1
+              localStorage.setItem('user', JSON.stringify(user))
+              navigate('/buytokens')
+              Swal.close();
+            } else {
+              db.collection('users').doc(user.id).update({
+                tokens: user.tokens - 1
+              })
+              user.tokens = user.tokens - 1
+              localStorage.setItem('user', JSON.stringify(user))
+              window.location.reload()
+            }
           })
-          user.tokens=user.tokens-1
-          localStorage.setItem('user',JSON.stringify(user))
-             navigate('/buytokens')
         }
 
         // alert(`winners are ${array2.length}`)
@@ -222,21 +262,77 @@ const GamePage = (props) => {
       } else if (array2.length > array1.length) {
 
         if (array1.some(data => data.data.id === user.id)) {
-          alert(`You win`)
-          db.collection('users').doc(user.id).update({
-            tokens: user.tokens+1
+          // alert(`You win`)
+
+          Swal.fire({
+            title: 'You Win!',
+            icon: 'success',
+            text: "Do you want to continue?",
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+          }).then(result => {
+            if (result.dismiss != null && result.dismiss != undefined) {
+              db.collection('users').doc(user.id).update({
+                tokens: user.tokens + 1
+              })
+              user.tokens = user.tokens + 1
+              localStorage.setItem('user', JSON.stringify(user))
+              navigate('/buytokens')
+              Swal.close();
+            } else {
+              db.collection('users').doc(user.id).update({
+                tokens: user.tokens + 1
+              })
+              user.tokens = user.tokens + 1
+              localStorage.setItem('user', JSON.stringify(user))
+              window.location.reload()
+            }
           })
-          user.tokens=user.tokens+1
-          localStorage.setItem('user',JSON.stringify(user))
-             navigate('/buytokens')
-        } else {
-          alert(`You lose`)
-          db.collection('users').doc(user.id).update({
-            tokens: user.tokens-1
+
+
+        }
+
+        else {
+          // alert(`You lose`)
+          // db.collection('users').doc(user.id).update({
+          //   tokens: user.tokens-1
+          // })
+          // user.tokens=user.tokens-1
+          // localStorage.setItem('user',JSON.stringify(user))
+          //    navigate('/buytokens')
+
+          Swal.fire({
+            title: 'You Lose!',
+            icon: 'error',
+            text: "Do you want to continue?",
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!',
+          }).then(result => {
+            if (result.dismiss != null && result.dismiss != undefined) {
+              db.collection('users').doc(user.id).update({
+                tokens: user.tokens - 1
+              })
+              user.tokens = user.tokens - 1
+              localStorage.setItem('user', JSON.stringify(user))
+              navigate('/buytokens')
+              Swal.close();
+            } else {
+              db.collection('users').doc(user.id).update({
+                tokens: user.tokens - 1
+              })
+              user.tokens = user.tokens - 1
+              localStorage.setItem('user', JSON.stringify(user))
+              window.location.reload()
+            }
           })
-          user.tokens=user.tokens-1
-          localStorage.setItem('user',JSON.stringify(user))
-             navigate('/buytokens')
+
+
         }
 
         // alert(`winners are ${array1.length}`)

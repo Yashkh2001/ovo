@@ -7,7 +7,7 @@ body{
   background-color: #241d2a !important;
 }
 div{
-  color: #fff !important;
+  color: #fff ;
 }
 
 .timer{
@@ -253,4 +253,11 @@ div{
 
 .m-t-10{
   margin-top: 10px !important;
+}
+a{
+  text-decoration: none !important;
+}
+a span{
+ 
+  color: #fff !important;
 }
