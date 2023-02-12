@@ -295,3 +295,34 @@ a span{
 .p-buttonset .p-button:not(:first-of-type):not(:last-of-type) {
   border-radius: 5px !important;
 }
+
+.profilepic{
+  width: 100px !important;
+  height: 100px !important;
+  border-radius: 50% !important;
+}
+
+.profilepic img{
+  width: 100%;
+  height: 100%;
+}
+
+.profilepic{
+  position: relative;
+}
+
+.justifyspace{
+  display: flex;
+  justify-content: space-between !important;
+}
+
+.myaccount{
+  padding: 10px !important;
+}
+
+.profilepic .fa-edit{
+  position: absolute;
+  margin-top: 75px !important;
+  right: 0px;
+  margin-left: 90px !important;
+}

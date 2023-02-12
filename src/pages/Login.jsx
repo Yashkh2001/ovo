@@ -234,7 +234,7 @@ const Login = () => {
                             Login
                         </button>
                         <div className='or'>OR</div>
-                        <div id='SignInDiv'></div>
+                        {/* <div id='SignInDiv'></div> */}
                         {/* <button onClick={onSignInSubmit} className='getStartedBtn'>
         Login with Google
     </button> */}

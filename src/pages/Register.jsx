@@ -95,6 +95,19 @@ const Register = () => {
                     name: name,
                     tokens: 0,
                     email: email,
+                    registationDate:new Date(),
+                    profiledoc:null,
+                    addressdoc:null,
+                    balance: 0,
+                    referredById:null,
+                    bonus: 0,
+                    totalgames: 0,
+                    phone:null,
+                    country:null,
+                    wins: 0,
+                    losses: 0,
+                    totalwithdraws:0,
+                    role: 'PLAYER',
                     loginwith: 'EMAIL'
                 }).then((res) => {
 
