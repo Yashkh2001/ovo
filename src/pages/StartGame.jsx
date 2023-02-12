@@ -16,20 +16,29 @@ const StartGame = () => {
 
 
     useEffect(() => {
-   
+
+      if (user == null) {
+        navigate('/login')
+      }else{
+        if (user.tokens==0) {
+          navigate('/buytokens')
+        }
+      }
+
+      
   
    
         // console.log('Hello World');
         window.onbeforeunload = confirmExit;
         function confirmExit() {
-          db.collection("activeusers").doc(user.id).delete()
-          db.collection("usersa").doc(user.id).delete()
-          db.collection("usersb").doc(user.id).delete()
+          db.collection("activeusers").doc(user?.id).delete()
+          db.collection("usersa").doc(user?.id).delete()
+          db.collection("usersb").doc(user?.id).delete()
         }
         return () => {
-          db.collection("activeusers").doc(user.id).delete()
-          db.collection("usersa").doc(user.id).delete()
-          db.collection("usersb").doc(user.id).delete()
+          db.collection("activeusers").doc(user?.id).delete()
+          db.collection("usersa").doc(user?.id).delete()
+          db.collection("usersb").doc(user?.id).delete()
         }
       }, [])
 

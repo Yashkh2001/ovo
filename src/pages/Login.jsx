@@ -10,6 +10,7 @@ import { auth } from '../external/firebase'
 import { db } from '../external/firebase'
 import { collection, addDoc, Timestamp } from 'firebase/firestore'
 import { getDoc, doc } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-firestore.js";
+
 // import './DropdownDemo.css';
 
 const Login = () => {
@@ -75,8 +76,19 @@ const Login = () => {
         // const auth = getAuth();
         firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
             console.log(result.user)
+            db.collection("users").where('email', '==', email).get().then((res) => {
+                res.docs.forEach((doc) => {
+                    let userData = doc.data()
+                    userData['id'] = doc.id
+                    console.log(doc.id, 'data')
+                    console.log(doc.data(), 'data')
+                    localStorage.setItem('user', JSON.stringify(userData))
+                    setUser(userData)
+                    navigate('/golive')
+                })
+            })
 
-        }).catch(error)
+        }).catch(alert)
 
     }
 
@@ -160,7 +172,7 @@ const Login = () => {
             } else {
                 db.collection("users").add({
                     name: userObject.name,
-                    tokens: 5,
+                    tokens: 0,
                     email: userObject.email,
                     loginwith: 'GOOGLE'
                 }).then((res) => {
@@ -231,8 +243,8 @@ const Login = () => {
                         </NavLink>
                     </div>
 
-                    <div id="recaptcha-container"></div>
-                    <div id="sign-in-button"></div>
+                    {/* <div id="recaptcha-container"></div>
+                    <div id="sign-in-button"></div> */}
                 </>
             }
 

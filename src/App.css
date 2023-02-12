@@ -261,3 +261,37 @@ a span{
  
   color: #fff !important;
 }
+
+.p-c::after{
+  content: '€';
+  font-size: 14px !important;
+  color: #fff !important;
+}
+
+.p-buttonset .p-button{
+  background-color: #10F442 !important;
+  opacity: 0.9 !important;
+}
+.p-selectbutton{
+  display: flex;
+  gap: 10px !important;
+}
+
+.p-selectbutton .p-button{
+  color: #fff !important;
+  padding: 6px 14px !important;
+}
+
+.p-buttonset .p-button:first-of-type {
+  border-top-right-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+}
+
+.p-buttonset .p-button:last-of-type {
+  border-top-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
+}
+
+.p-buttonset .p-button:not(:first-of-type):not(:last-of-type) {
+  border-radius: 5px !important;
+}
