@@ -28,7 +28,7 @@ const BuyTokens = () => {
   const gotocheckoutpage=()=>{
     if(value==null || value==0){
       Swal.fire({
-        icon:'warning',
+        icon:'error',
         text:'Please select your token range'
       })
     }else{

@@ -99,7 +99,7 @@ div{
   height: 60px;
   width: 100%;
   display: flex;
-
+background-color: #241d2a !important;
   justify-content: space-between !important;
   align-items: center;
 }
@@ -183,9 +183,25 @@ div{
 .dropdown-demo .p-dropdown {
   width: 14rem;
 }
+.m-t-5{
+  margin-top: 5px !important;
+}
+
+.m-t-30{
+  margin-top: 30px !important;
+}
+.m-t-35{
+  margin-top: 35px !important;
+}
 
 .m-t-20{
   margin-top: 20px !important;
+}
+.m-t-25{
+  margin-top: 25px !important;
+}
+.m-b-15{
+  margin-bottom: 15px !important;
 }
 .m-b-20{
   margin-bottom: 20px !important;
@@ -318,6 +334,8 @@ a span{
 
 .myaccount{
   padding: 10px !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
 }
 
 .profilepic .fa-edit{
@@ -325,4 +343,74 @@ a span{
   margin-top: 75px !important;
   right: 0px;
   margin-left: 90px !important;
+}
+.p-float-label > label{
+  color: #6ad982 !important;
+}
+.color-greenlight{
+  color: #6ad982 !important;
+}
+.myaccount{
+  margin-bottom: 80px !important;
+}
+
+
+.f-14{
+  font-size: 14px !important;
+}
+
+.f-13{
+  font-size: 13px !important;
+}
+
+.p-inputtext{
+color: #fff !important;
+width: 100% !important;
+background-color: #241d2a !important;
+background: #241d2a !important;
+  border: 0.5px solid #10F442 !important;
+}
+
+.documentdiv .fa-cloud-arrow-up{
+  font-size: 30px !important;
+}
+.wid-100{
+  width: 100% !important;
+}
+
+.justifyright{
+  display: flex;
+  justify-content: flex-end !important;
+}
+
+.documentdiv{
+  background-color: transparent !important;
+  width: 100% !important;
+  height: 100px !important;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #10F442 !important;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #10F442 !important;
+  align-items: center;
+}
+
+.savechangesbtn {
+  padding: 10px !important;
+  width: 200px;
+  height: 45px;
+  border-radius: 10px !important;
+  background-color: #10F442 !important;
+  opacity: 0.95;
+  font-size: 14px;
+  color: #fff !important;
+  border: none;
+}
+
+.addressImage img{
+  width: 100% !important;
+  height: 100px !important;
 }

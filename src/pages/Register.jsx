@@ -93,11 +93,13 @@ const Register = () => {
                 clearInterval(intervalId);
                 db.collection("users").add({
                     name: name,
+                    username:null,
                     tokens: 0,
                     email: email,
                     registationDate:new Date(),
                     profiledoc:null,
                     addressdoc:null,
+                    addressdoc1:null,
                     balance: 0,
                     referredById:null,
                     bonus: 0,
@@ -125,13 +127,13 @@ const Register = () => {
                             localStorage.setItem('user', JSON.stringify(userData))
                             setUser(userData)
 
-                            // emailjs.send('service_z48t3oc', 'template_1ermxnu', templateParams, 'LH5wNxDjsIog4KlcJ')
-                            //     .then(function (response) {
-                            //         console.log('SUCCESS!', response.status, response.text);
-                            //         navigate('/golive')
-                            //     }, function (err) {
-                            //         console.log('FAILED...', err);
-                            //     });
+                            emailjs.send('service_z48t3oc', 'template_1ermxnu', templateParams, 'LH5wNxDjsIog4KlcJ')
+                                .then(function (response) {
+                                    console.log('SUCCESS!', response.status, response.text);
+                                    navigate('/golive')
+                                }, function (err) {
+                                    console.log('FAILED...', err);
+                                });
                             navigate('/golive')
                         
                         })
